@@ -63,7 +63,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation("androidx.activity:activity-compose:1.7.0")
     implementation("androidx.navigation:navigation-compose:2.7.0")
-
-    // Para persistencia de datos
+    implementation("io.coil-kt:coil-compose:2.2.2")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 }
