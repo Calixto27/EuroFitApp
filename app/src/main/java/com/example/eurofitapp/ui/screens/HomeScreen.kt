@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,26 +19,37 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.eurofitapp.data.TestRepository
 import com.example.eurofitapp.model.TestModel
+import com.example.eurofitapp.navigation.Screens
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(navController: NavController) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Pruebas Físicas") })
+            TopAppBar(
+                title = { Text("Pruebas Físicas") },
+                actions = {
+                    IconButton(onClick = { navController.navigate(Screens.UserSettings.route) }) {
+                        Icon(Icons.Default.Settings, contentDescription = "Configuración")
+                    }
+                    IconButton(onClick = { navController.navigate(Screens.TestResults.route) }) {
+                        Icon(Icons.Default.List, contentDescription = "Resultados")
+                    }
+                }
+            )
         }
     ) {
-        val testList = TestRepository.testList
         LazyColumn(modifier = Modifier.padding(16.dp)) {
-            items(testList) { test ->
-                TestItem(test)
+            items(TestRepository.testList) { test ->
+                TestItem(test, navController)
             }
         }
     }
 }
 
+
 @Composable
-fun TestItem(test: TestModel) {
+fun TestItem(test: TestModel, navController: NavController) {
     val uriHandler = LocalUriHandler.current
 
     Card(
