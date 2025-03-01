@@ -16,17 +16,19 @@ import kotlinx.coroutines.runBlocking
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun UserSettingsScreen() {
+fun UserSettingsScreen(onThemeChange: (Boolean) -> Unit) {
     val context = LocalContext.current
     val userPreferences = remember { UserPreferences(context) }
     val coroutineScope = rememberCoroutineScope()
 
     val userData = runBlocking { userPreferences.userData.first() }
+    val isDarkMode = runBlocking { userPreferences.darkMode.first() }
 
     var age by remember { mutableStateOf(userData.age.toString()) }
     var height by remember { mutableStateOf(userData.height.toString()) }
     var weight by remember { mutableStateOf(userData.weight.toString()) }
     var gender by remember { mutableStateOf(userData.gender) }
+    var darkMode by remember { mutableStateOf(isDarkMode) }
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("Configuración de Usuario") }) }
@@ -38,16 +40,50 @@ fun UserSettingsScreen() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text("Edad")
-            OutlinedTextField(value = age, onValueChange = { age = it })
+            OutlinedTextField(
+                value = age,
+                onValueChange = { age = it },
+                label = { Text("Edad") }
+            )
 
             Text("Altura (cm)")
-            OutlinedTextField(value = height, onValueChange = { height = it })
+            OutlinedTextField(
+                value = height,
+                onValueChange = { height = it },
+                label = { Text("Altura (cm)") }
+            )
 
             Text("Peso (kg)")
-            OutlinedTextField(value = weight, onValueChange = { weight = it })
+            OutlinedTextField(
+                value = weight,
+                onValueChange = { weight = it },
+                label = { Text("Peso (kg)") }
+            )
 
             Text("Género")
-            OutlinedTextField(value = gender, onValueChange = { gender = it })
+            OutlinedTextField(
+                value = gender,
+                onValueChange = { gender = it },
+                label = { Text("Género") }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Modo Oscuro")
+                Switch(
+                    checked = darkMode,
+                    onCheckedChange = {
+                        darkMode = it
+                        coroutineScope.launch {
+                            userPreferences.saveDarkMode(it)
+                        }
+                        onThemeChange(it)
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 

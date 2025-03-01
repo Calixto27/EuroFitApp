@@ -1,14 +1,12 @@
 package com.example.eurofitapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.eurofitapp.ui.screens.HomeScreen
-import com.example.eurofitapp.ui.screens.LoginScreen
-import com.example.eurofitapp.ui.screens.TestDetailScreen
-import com.example.eurofitapp.ui.screens.TestResultsScreen
-import com.example.eurofitapp.ui.screens.UserSettingsScreen
+import com.example.eurofitapp.ui.screens.*
 
 sealed class Screens(val route: String) {
     object Login : Screens("login_screen")
@@ -18,11 +16,12 @@ sealed class Screens(val route: String) {
     }
     object UserSettings : Screens("user_settings_screen")
     object TestResults : Screens("test_results_screen")
+    object BMI : Screens("bmi_screen")
 }
 
 @Composable
-fun Navigation() {
-    val navController = rememberNavController()
+fun Navigation(onThemeChange: (Boolean) -> Unit, modifier: Modifier) {
+    val navController: NavHostController = rememberNavController()
 
     NavHost(navController = navController, startDestination = Screens.Login.route) {
         composable(Screens.Login.route) { LoginScreen(navController) }
@@ -31,7 +30,8 @@ fun Navigation() {
             val testName = backStackEntry.arguments?.getString("testName") ?: ""
             TestDetailScreen(navController, testName)
         }
-        composable(Screens.UserSettings.route) { UserSettingsScreen() }
+        composable(Screens.UserSettings.route) { UserSettingsScreen(onThemeChange) }
         composable(Screens.TestResults.route) { TestResultsScreen() }
+        composable(Screens.BMI.route) { BMIScreen(navController) }
     }
 }

@@ -12,7 +12,7 @@ import com.example.eurofitapp.navigation.Screens
 @Composable
 fun LoginScreen(navController: NavController) {
     var password by remember { mutableStateOf("") }
-    var storedPassword by remember { mutableStateOf("1234") }
+    val storedPassword = "1234"
     var errorMessage by remember { mutableStateOf("") }
 
     Column(
@@ -22,10 +22,11 @@ fun LoginScreen(navController: NavController) {
     ) {
         Text("Ingrese su contraseña")
 
-        TextField(
+        OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Contraseña") }
+            label = { Text("Contraseña") },
+            modifier = Modifier.fillMaxWidth().padding(16.dp)
         )
 
         Button(
@@ -41,6 +42,8 @@ fun LoginScreen(navController: NavController) {
             Text("Ingresar")
         }
 
-        Text(errorMessage, color = MaterialTheme.colors.error)
+        if (errorMessage.isNotEmpty()) {
+            Text(errorMessage, color = MaterialTheme.colors.error, modifier = Modifier.padding(top = 8.dp))
+        }
     }
 }

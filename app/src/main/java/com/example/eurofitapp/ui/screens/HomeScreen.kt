@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
@@ -24,11 +25,20 @@ import com.example.eurofitapp.navigation.Screens
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(navController: NavController) {
+    var searchQuery by remember { mutableStateOf("") }
+
+    val filteredTests = TestRepository.testList.filter {
+        it.name.contains(searchQuery, ignoreCase = true)
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Pruebas Físicas") },
                 actions = {
+                    IconButton(onClick = { navController.navigate(Screens.BMI.route) }) {
+                        Icon(Icons.Default.Favorite, contentDescription = "IMC")
+                    }
                     IconButton(onClick = { navController.navigate(Screens.UserSettings.route) }) {
                         Icon(Icons.Default.Settings, contentDescription = "Configuración")
                     }
@@ -39,14 +49,24 @@ fun HomeScreen(navController: NavController) {
             )
         }
     ) {
-        LazyColumn(modifier = Modifier.padding(16.dp)) {
-            items(TestRepository.testList) { test ->
-                TestItem(test, navController)
+        Column(modifier = Modifier.padding(16.dp)) {
+            OutlinedTextField(
+                value = searchQuery,
+                onValueChange = { searchQuery = it },
+                label = { Text("Buscar prueba") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            LazyColumn {
+                items(filteredTests) { test ->
+                    TestItem(test, navController)
+                }
             }
         }
     }
 }
-
 
 @Composable
 fun TestItem(test: TestModel, navController: NavController) {

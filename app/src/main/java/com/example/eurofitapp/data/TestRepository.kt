@@ -1,11 +1,14 @@
 package com.example.eurofitapp.data
 
 import com.example.eurofitapp.model.TestModel
-object TestRepository{
+
+object TestRepository {
     val testList = listOf(
-        TestModel(1, "Salto Horizontal", "https://via.placeholder.com/150", "https://example.com/salto-horizontal", "Fuerza muscular"),
-        TestModel(2, "Flexión de Tronco", "https://via.placeholder.com/150", "https://example.com/flexion-tronco", "Flexibilidad"),
-        TestModel(3, "Test de Velocidad 10m", "https://via.placeholder.com/150", "https://example.com/velocidad-10m", "Velocidad"),
-        TestModel(4, "Test de Agilidad", "https://via.placeholder.com/150", "https://example.com/agilidad", "Agilidad")
+        TestModel(1, "Test Cooper", "https://example.com/images/cooper.jpg", "https://example.com/cooper", "Resistencia"),
+        TestModel(2, "Velocidad 5x10", "https://example.com/images/velocidad.jpg", "https://example.com/velocidad", "Velocidad"),
+        TestModel(3, "Lanzamiento de balón", "https://example.com/images/lanzamiento.jpg", "https://example.com/lanzamiento", "Fuerza"),
+        TestModel(4, "Salto horizontal", "https://example.com/images/salto.jpg", "https://example.com/salto", "Potencia"),
+        TestModel(5, "Flexión de brazos", "https://example.com/images/flexion.jpg", "https://example.com/flexion", "Fuerza"),
+        TestModel(6, "Abdominales 30", "https://example.com/images/abdominales.jpg", "https://example.com/abdominales", "Resistencia muscular")
     )
 }

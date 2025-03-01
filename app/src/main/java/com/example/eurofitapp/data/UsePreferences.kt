@@ -19,6 +19,7 @@ class UserPreferences(private val context: Context) {
         private val WEIGHT_KEY = doublePreferencesKey("weight")
         private val GENDER_KEY = stringPreferencesKey("gender")
         private val RESULTS_KEY = stringPreferencesKey("test_results")
+        private val DARK_MODE_KEY = booleanPreferencesKey("dark_mode")
     }
 
     // Obtener valores almacenados
@@ -53,6 +54,18 @@ class UserPreferences(private val context: Context) {
     // Obtener resultados de pruebas almacenados
     val testResults: Flow<String> = context.dataStore.data.map { preferences ->
         preferences[RESULTS_KEY] ?: ""
+    }
+
+    // Obtener estado del modo oscuro
+    val darkMode: Flow<Boolean> = context.dataStore.data.map { preferences ->
+        preferences[DARK_MODE_KEY] ?: false
+    }
+
+    // Guardar estado del modo oscuro
+    suspend fun saveDarkMode(isDarkMode: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[DARK_MODE_KEY] = isDarkMode
+        }
     }
 }
 

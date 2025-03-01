@@ -44,7 +44,8 @@ fun TestDetailScreen(navController: NavController, testName: String) {
             OutlinedTextField(
                 value = userValue,
                 onValueChange = { userValue = it },
-                label = { Text("Ingrese su marca") }
+                label = { Text("Ingrese su marca") },
+                modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -60,19 +61,17 @@ fun TestDetailScreen(navController: NavController, testName: String) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            if (score != null) {
-                Text(text = "Su nota es: $score", style = MaterialTheme.typography.h6)
+            score?.let {
+                Text(text = "Su nota es: $it", style = MaterialTheme.typography.h6)
 
                 Button(onClick = {
                     coroutineScope.launch {
-                        userPreferences.saveTestResult(testName, score!!)
+                        userPreferences.saveTestResult(testName, it)
                     }
                 }) {
                     Text("Guardar Resultado")
                 }
-            } else {
-                Text(text = "No se encontró una nota para su marca", color = MaterialTheme.colors.error)
-            }
+            } ?: Text(text = "No se encontró una nota para su marca", color = MaterialTheme.colors.error)
         }
     }
 }
