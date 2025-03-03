@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
@@ -27,14 +28,20 @@ import com.example.eurofitapp.navigation.Screens
 fun HomeScreen(navController: NavController) {
     var searchQuery by remember { mutableStateOf("") }
 
-    val filteredTests = TestRepository.testList.filter {
-        it.name.contains(searchQuery, ignoreCase = true)
+    val testList = TestRepository.testList // Aseguramos que testList es una lista de TestModel
+    val filteredTests = remember(searchQuery) {
+        testList.filter { it.name.contains(searchQuery, ignoreCase = true) }
     }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Pruebas Físicas") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
+                    }
+                },
                 actions = {
                     IconButton(onClick = { navController.navigate(Screens.BMI.route) }) {
                         Icon(Icons.Default.Favorite, contentDescription = "IMC")
@@ -76,7 +83,7 @@ fun TestItem(test: TestModel, navController: NavController) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable { uriHandler.openUri(test.descriptionUrl) },
+            .clickable { navController.navigate(Screens.TestDetail.createRoute(test.name))},
         elevation = 4.dp
     ) {
         Row(
